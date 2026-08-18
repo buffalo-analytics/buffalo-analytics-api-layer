@@ -1,10 +1,10 @@
 # buffalo/api
 
-Laravel HTTP client for [buffalo-api](http://buffalo-api.loc). This package does not copy models, controllers, or migrations from the API. A consuming app talks to a running buffalo-api instance over HTTP.
+HTTP client for [buffalo-api](http://buffalo-api.loc). This package does not copy models, controllers, or migrations from the API. A consuming app talks to a running buffalo-api instance over HTTP.
 
-Requires PHP 8.2+ and Laravel 11, 12, or 13.
+Requires PHP 8.2+ and `illuminate/http` ^11 / ^12 / ^13. Laravel 11–13 apps get auto-discovery; plain PHP apps instantiate `Client` directly.
 
-## Install in another Laravel project
+## Install in a Laravel project
 
 The package is not on Packagist. Add it with a Composer `path` repository (local copy) or a `vcs` repository (git).
 
@@ -60,7 +60,7 @@ When the package has its own git remote:
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:your-org/buffalo-api-client.git"
+            "url": "git@github.com:MotsumiDarts/BA_API_Package.git"
         }
     ]
 }
@@ -106,9 +106,37 @@ php artisan about
 
 The `Buffalo API` section should show the base URL and whether a token is set.
 
+## Install in plain PHP
+
+`Client` does not use the `Http` facade. Pass an `Illuminate\Http\Client\Factory` as the first constructor argument so it works without a booted Laravel container:
+
+```bash
+composer require buffalo/api
+```
+
+```php
+use Buffalo\Api\Client;
+use Illuminate\Http\Client\Factory;
+
+$http = new Factory();
+$client = new Client($http, 'http://buffalo-api.loc/api');
+
+$client->login('user@example.com', 'secret');
+$client->animals()->getAllAnimals();
+```
+
+`Client::make()` builds a factory for you:
+
+```php
+$client = Client::make('http://buffalo-api.loc/api');
+$client = Client::make('http://buffalo-api.loc/api', token: $token, http: $http);
+```
+
+Laravel apps should keep using auto-discovery (`BuffaloApi` / `app(Client::class)`). The service provider injects the application HTTP factory, so `Http::fake()` still works.
+
 ## Usage
 
-### Facade
+### Facade (Laravel)
 
 ```php
 use Buffalo\Api\Exceptions\AuthenticationException;

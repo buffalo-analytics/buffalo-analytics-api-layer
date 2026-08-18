@@ -1,6 +1,6 @@
 {
     "name": "buffalo/api",
-    "description": "Laravel HTTP client for the Buffalo API (buffalo-api).",
+    "description": "HTTP client for the Buffalo API (buffalo-api). Works in Laravel and plain PHP.",
     "license": "MIT",
     "type": "library",
     "version": "1.0.0",

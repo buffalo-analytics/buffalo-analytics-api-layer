@@ -4,6 +4,7 @@ namespace Buffalo\Api;
 
 use Buffalo\Api\Console\GenerateResourcesCommand;
 use Illuminate\Foundation\Console\AboutCommand;
+use Illuminate\Http\Client\Factory;
 use Illuminate\Support\ServiceProvider;
 
 class BuffaloApiServiceProvider extends ServiceProvider
@@ -16,6 +17,7 @@ class BuffaloApiServiceProvider extends ServiceProvider
             $config = $app['config']['buffalo-api'];
 
             return new Client(
+                http: $app->make(Factory::class),
                 baseUrl: (string) $config['base_url'],
                 token: $config['token'] ?: null,
                 timeout: (int) $config['timeout'],

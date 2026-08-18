@@ -4,8 +4,8 @@ namespace Buffalo\Api;
 
 use BadMethodCallException;
 use Buffalo\Api\Exceptions\AuthenticationException;
+use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 
@@ -14,6 +14,7 @@ class Client
     use AccessesResources;
 
     public function __construct(
+        protected Factory $http,
         protected string $baseUrl,
         protected ?string $token = null,
         protected int $timeout = 30,
@@ -22,6 +23,24 @@ class Client
     ) {
         $this->baseUrl = rtrim($baseUrl, '/');
         $this->token = $this->token !== '' ? $this->token : null;
+    }
+
+    public static function make(
+        string $baseUrl,
+        ?string $token = null,
+        int $timeout = 30,
+        int $retries = 0,
+        int $retrySleep = 100,
+        ?Factory $http = null,
+    ): static {
+        return new static(
+            $http ?? new Factory(),
+            $baseUrl,
+            $token,
+            $timeout,
+            $retries,
+            $retrySleep,
+        );
     }
 
     public function baseUrl(): string
@@ -111,7 +130,8 @@ class Client
      */
     protected function pendingRequest(array $files = []): PendingRequest
     {
-        $request = Http::baseUrl($this->baseUrl)
+        $request = $this->http
+            ->baseUrl($this->baseUrl)
             ->acceptJson()
             ->timeout($this->timeout);
 
