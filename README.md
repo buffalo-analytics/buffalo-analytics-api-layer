@@ -67,7 +67,15 @@ When the package has its own git remote:
 ```
 
 ```bash
-composer require buffalo/api
+composer require buffalo/api:^1.0
+```
+
+Composer only treats tagged git refs as stable. `^1.0` needs a `1.0.0` (or `v1.0.0`) tag on the package repo. Without a tag, `composer require buffalo/api` fails because Laravel's `minimum-stability` is `stable` and the only available version is `dev-main`.
+
+If you must install from a branch before a tag exists:
+
+```bash
+composer require buffalo/api:dev-main
 ```
 
 Private repositories need SSH access or a [Composer auth token](https://getcomposer.org/doc/articles/authentication-for-private-packages.md).
