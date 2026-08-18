@@ -1,0 +1,36 @@
+{
+    "name": "buffalo/api",
+    "description": "Laravel HTTP client for the Buffalo API (buffalo-api).",
+    "license": "MIT",
+    "type": "library",
+    "version": "1.0.0",
+    "keywords": ["laravel", "buffalo", "api", "client"],
+    "require": {
+        "php": "^8.2",
+        "illuminate/console": "^11.0|^12.0|^13.0",
+        "illuminate/http": "^11.0|^12.0|^13.0",
+        "illuminate/support": "^11.0|^12.0|^13.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Buffalo\\Api\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Buffalo\\Api\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Buffalo\\Api\\BuffaloApiServiceProvider"
+            ],
+            "aliases": {
+                "BuffaloApi": "Buffalo\\Api\\Facades\\BuffaloApi"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
